@@ -22,7 +22,7 @@ public record SearchPost(
     Instant createdAt,
 
     @Column("expires_on")
-    LocalDate expirationDate
+    String expirationDate
 ) {
 
     public SearchPost {
@@ -38,6 +38,6 @@ public record SearchPost(
     }
 
     public static SearchPost withExpirationDate(LocalDate expirationDate) {
-        return new SearchPost(null, Instant.now(), expirationDate);
+        return new SearchPost(null, Instant.now(), expirationDate.toString());
     }
 }

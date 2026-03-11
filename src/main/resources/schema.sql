@@ -7,7 +7,7 @@ CREATE TABLE searches (
 CREATE TABLE search_posts (
     search_id UUID NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    expires_on DATE NOT NULL,
+    expires_on VARCHAR(10) NOT NULL,
     PRIMARY KEY (search_id, created_at),
     FOREIGN KEY (search_id) REFERENCES searches(id) ON DELETE CASCADE
 );
