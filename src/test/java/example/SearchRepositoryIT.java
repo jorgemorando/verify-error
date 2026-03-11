@@ -13,10 +13,9 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Triggers VerifyError when Spring Data JDBC persists Search with SearchPost collection.
- * Error: java.lang.VerifyError: Bad type on operand stack in putfield
- * Location: SearchPost__Accessor_*.setProperty(...)
- * Cause: ClassGeneratingPropertyAccessorFactory generates invalid bytecode for record without @Id
+ * Integration tests for Search aggregate with SearchPost collection.
+ * Fix: SearchPost is a private static inner class to avoid ClassGeneratingPropertyAccessorFactory
+ * VerifyError; H2 uses REFERENTIAL_INTEGRITY=FALSE for batch insert order.
  */
 @SpringBootTest
 class SearchRepositoryIT {

@@ -2,7 +2,7 @@
 
 Minimal project that reproduces a `VerifyError` when persisting an entity with a `@MappedCollection` of **record** entities that have **no `@Id`** (composite key).
 
-## Error
+## Error (Original)
 
 ```
 java.lang.VerifyError: Bad type on operand stack in putfield
@@ -17,7 +17,12 @@ Exception Details:
 
 `ClassGeneratingPropertyAccessorFactory` generates invalid bytecode for the `SearchPost` record when Spring Data JDBC needs to persist it. The generated accessor class attempts a `putfield` with an incompatible type.
 
-## Trigger Conditions
+## Fix Applied
+
+1. **SearchPost as private static inner class** – Spring Data falls back to `ReflectionPropertyAccessorFactory` for private classes, avoiding the buggy bytecode generator.
+2. **REFERENTIAL_INTEGRITY=FALSE** – H2 workaround for batch insert order: child inserts can run before parent inserts are visible within the same transaction.
+
+## Trigger Conditions (Original)
 
 - Parent entity (`Search`) has `@MappedCollection(idColumn = "search_id")` of child entities
 - Child entity (`SearchPost`) is a **Java record** with **no `@Id`** (identified by composite key `search_id` + `created_at`)
@@ -42,13 +47,12 @@ mvn test -Dtest=SearchRepositoryIT
 src/main/java/example/
 ├── MinimalVerifyErrorApplication.java
 ├── domain/
-│   ├── Search.java          # Parent with @MappedCollection of SearchPost
-│   └── SearchPost.java      # Record without @Id (composite key)
+│   └── Search.java          # Parent with @MappedCollection; SearchPost as private inner class
 └── persistence/
     └── SearchRepository.java
 
 src/test/java/example/
-└── SearchRepositoryIT.java  # Triggers VerifyError on save()
+└── SearchRepositoryIT.java  # Integration tests
 ```
 
 ## For Spring Framework Issue Tracker
