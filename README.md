@@ -53,11 +53,12 @@ src/test/java/example/
 
 ## For Spring Framework Issue Tracker
 
-**Suggested title:** `VerifyError when persisting @MappedCollection of record without @Id`
+**Suggested title:** `VerifyError when persisting @MappedCollection of record`
 
 **Suggested labels:** `spring-data-jdbc`, `type: bug`, `status: waiting-for-triage`
 
 **Steps to reproduce:**
+
 1. Clone this project
 2. Run `mvn test -Dtest=SearchRepositoryIT`
 3. Observe `VerifyError` in `SearchPost__Accessor_*.setProperty`
